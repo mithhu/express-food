@@ -1,0 +1,127 @@
+CREATE TABLE Customer (
+    id INT PRIMARY KEY,
+    name VARCHAR(20),
+    address VARCHAR(20),
+    phone VARCHAR(20),
+    city VARCHAR(20)
+);
+
+DESCRIBE Customer;
+SELECT * from Customer;
+CREATE TABLE Refrigerator (
+    id INT PRIMARY KEY,
+    quantity INT,
+    name VARCHAR(20)
+);
+
+INSERT INTO Refrigerator(id) Values(101);
+DESCRIBE Refrigerator;
+SELECT * FROM Refrigerator;
+
+DROP TABLE Dish;
+CREATE TABLE Dish (
+    id INT PRIMARY KEY,
+    name VARCHAR(20),
+    mfg_date VARCHAR(10),
+    expiry_date VARCHAR(10),
+    refrigertor_id INT,
+    FOREIGN KEY (refrigertor_id) REFERENCES Refrigerator(id)
+);
+
+DESCRIBE Dish;
+SELECT * FROM Dish;
+
+CREATE TABLE Dessert (
+    id INT PRIMARY KEY,
+    name VARCHAR(20),
+    mfg_date VARCHAR(10),
+    expiry_date VARCHAR(10),
+    refrigertor_id INT,
+    FOREIGN KEY (refrigertor_id) REFERENCES Refrigerator(id)
+);
+
+DESCRIBE Dessert;
+SELECT * FROM Dessert;
+
+
+CREATE TABLE Cheff (
+    id INT PRIMARY KEY,
+    name VARCHAR(20),
+    dish_id INT,
+    dessert_id INT,
+    FOREIGN KEY (dish_id) REFERENCES Dish(id),
+    FOREIGN KEY (dessert_id) REFERENCES Dessert(id)
+);
+
+DESCRIBE Cheff;
+SELECT * FROM Cheff;
+
+
+CREATE TABLE Food_Item (
+    id INT PRIMARY KEY,
+    dish_id INT,
+    dessert_id INT,
+    FOREIGN KEY (dish_id) REFERENCES Dish(id),
+    FOREIGN KEY (dessert_id) REFERENCES Dessert(id)
+);
+
+DESCRIBE Food_Item;
+SELECT * FROM Food_Item;
+
+
+CREATE TABLE Food_Order (
+    id INT PRIMARY KEY,
+    food_item_id INT,
+    FOREIGN KEY (food_item_id) REFERENCES Food_item(id)
+);
+
+ALTER TABLE Food_Order
+ADD quantity INT;
+
+DESCRIBE Food_Order;
+
+CREATE TABLE Delivery_Guy (
+    id INT PRIMARY KEY,
+    name VARCHAR(20),
+    bike_id INT,
+    phone_no VARCHAR(10),
+    delivery_time VARCHAR(10)
+);
+
+DESCRIBE Delivery_Guy;
+
+CREATE Table Delivery_Office (
+    id INT PRIMARY KEY,
+    delivery_guy_id INT,
+    order_id INT,
+    delivery_office_location VARCHAR(20),
+    FOREIGN KEY (order_id) REFERENCES Food_Order(id),
+    FOREIGN KEY (delivery_guy_id) REFERENCES Delivery_Guy(id)
+
+
+);
+
+
+DESCRIBE Delivery_Office;
+
+CREATE TABLE Food_Office (
+    id INT PRIMARY KEY,
+    delivery_office_id INT,
+    order_id INT,
+    FOREIGN KEY (order_id) REFERENCES Food_Order(id),
+    FOREIGN KEY (delivery_office_id) REFERENCES Delivery_Office(id)
+);
+
+DESCRIBE Food_Office;
+
+CREATE TABLE Payment (
+    id INT PRIMARY KEY,
+    order_id INT,
+    payment_method VARCHAR(10),
+    FOREIGN KEY (order_id) REFERENCES Food_Order(id)
+);
+
+DESCRIBE Payment;
+
+CREATE VIEW Menu AS SELECT * FROM Food_Item;
+SELECT * FROM Menu;
